@@ -2,54 +2,56 @@
 
 namespace Hexlet\Validator\Types;
 
+use Hexlet\Validator\Validator;
+
 class NumberType
 {
-    private $validator;
+    private Validator $validator;
     private int $id;
     private int $beginNumber;
     private int $endNumber;
-    private $function;
-    private $value;
+    private mixed $function;
+    private mixed $value;
     //Didn't come up with anything better than flags :(
-    private $flags = [
+    private array $flags = [
         'required' => false,
         'positive' => false,
         'range' => false,
         'test' => false
     ];
-    private $validity = [
+    private array $validity = [
         'required' => false,
         'positive' => false,
         'range' => false,
         'test' => false
     ];
 
-    public function __construct($validator, $id)
+    public function __construct(Validator $validator, int $id)
     {
         $this->id = $id;
         $this->validator = $validator;
     }
 
-    public function required()
+    public function required(): NumberType
     {
         $this->flags['required'] = true;
         return $this;
     }
 
-    public function positive()
+    public function positive(): NumberType
     {
         $this->flags['positive'] = true;
         return $this;
     }
 
-    public function range(int $startNumber, int $endNumber)
+    public function range(int $startNumber, int $endNumber): NumberType
     {
         $this->flags['range'] = true;
         $this->beginNumber = $startNumber;
         $this->endNumber = $endNumber;
         return $this;
     }
-    public function test($name, $value)
+    public function test(string $name, mixed $value): NumberType
     {
         $this->function = $this->validator->getFunctionByName($name);
         $this->value = $value;
@@ -57,7 +59,7 @@ class NumberType
         return $this;
     }
 
-    public function isValid($data)
+    public function isValid(mixed $data): bool
     {
         if ($this->flags['required']) {
             $this->validity['required'] = (is_int($data) && $data != null) ? true : false;
@@ -85,5 +87,10 @@ class NumberType
         }
         //check didn't return false then it's true
         return true;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

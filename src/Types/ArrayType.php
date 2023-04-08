@@ -2,55 +2,57 @@
 
 namespace Hexlet\Validator\Types;
 
+use Hexlet\Validator\Validator;
+
 class ArrayType
 {
-    private $validator;
+    private Validator $validator;
     private int $id;
     private int $checkSize;
-    private $function;
-    private $value;
+    private mixed $function;
+    private mixed $value;
     //Didn't come up with anything better than flags :(
-    private $flags = [
+    private array $flags = [
         'required' => false,
         'sizeof' => false,
         'shape' => false,
         'test' => false
     ];
-    private $validity = [
+    private array $validity = [
         'required' => false,
         'sizeof' => false,
         'shape' => false,
         'test' => false
     ];
-    private $shapeArray;
+    private array $shapeArray;
 
-    public function __construct($validator, $id)
+    public function __construct(Validator $validator, int $id)
     {
         $this->id = $id;
         $this->validator = $validator;
     }
 
-    public function required()
+    public function required(): ArrayType
     {
         $this->flags['required'] = true;
         return $this;
     }
 
-    public function sizeof(int $size)
+    public function sizeof(int $size): ArrayType
     {
         $this->flags['sizeof'] = true;
         $this->checkSize = $size;
         return $this;
     }
 
-    public function shape($array)
+    public function shape(array $array): ArrayType
     {
         $this->flags['shape'] = true;
         $this->shapeArray = $array;
         return $this;
     }
 
-    public function test($name, $value)
+    public function test(string $name, mixed $value): ArrayType
     {
         $this->function = $this->validator->getFunctionByName($name);
         $this->value = $value;
@@ -58,7 +60,7 @@ class ArrayType
         return $this;
     }
 
-    public function isValid($data)
+    public function isValid(mixed $data): bool
     {
         if ($this->flags['required']) {
             $this->validity['required'] = (is_array($data) && $data !== null) ? true : false;
@@ -73,7 +75,7 @@ class ArrayType
                 $checkArray[] = $checkOption->isValid($data[$key]);
             }
             //if no falses in checkArray then it's true. Otherwise false.
-            $this->validity['shape'] = (!in_array(false, $checkArray)) ? true : false;
+            $this->validity['shape'] = (!in_array(false, $checkArray, false)) ? true : false;
         }
         if ($this->flags['test']) {
             $fn = $this->function;
@@ -91,5 +93,10 @@ class ArrayType
         }
         //check didn't return false then it's true
         return true;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

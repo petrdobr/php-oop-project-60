@@ -2,56 +2,56 @@
 
 namespace Hexlet\Validator\Types;
 
-use PHPUnit\Framework\Constraint\Callback;
+use Hexlet\Validator\Validator;
 
 class StringType
 {
-    private $validator;
+    private Validator $validator;
     private string $subLine;
     private int $id;
     private int $length;
-    private $function;
-    private $value;
+    private mixed $function;
+    private mixed $value;
     //Didn't come up with anything better than flags :(
-    private $flags = [
+    private array $flags = [
         'required' => false,
         'contains' => false,
         'minLength' => false,
         'test' => false
     ];
-    private $validity = [
+    private array $validity = [
         'required' => false,
         'contains' => false,
         'minLength' => false,
         'test' => false
     ];
 
-    public function __construct($validator, $id)
+    public function __construct(Validator $validator, int $id)
     {
         $this->id = $id;
         $this->validator = $validator;
     }
 
-    public function required()
+    public function required(): StringType
     {
         $this->flags['required'] = true;
         return $this;
     }
 
-    public function contains(string $subLine)
+    public function contains(string $subLine): StringType
     {
         $this->flags['contains'] = true;
         $this->subLine = $subLine;
         return $this;
     }
 
-    public function minLength(int $length)
+    public function minLength(int $length): StringType
     {
         $this->flags['minLength'] = true;
         $this->length = $length;
         return $this;
     }
-    public function test($name, $value)
+    public function test(string $name, mixed $value): StringType
     {
         $this->function = $this->validator->getFunctionByName($name);
         $this->value = $value;
@@ -59,7 +59,7 @@ class StringType
         return $this;
     }
 
-    public function isValid($data)
+    public function isValid(mixed $data): bool
     {
         if ($this->flags['required']) {
             $this->validity['required'] = (is_string($data) && $data != null) ? true : false;
@@ -87,5 +87,10 @@ class StringType
         }
         //check didn't return false then it's true
         return true;
+    }
+
+    public function getId(): int
+    {
+          return $this->id;
     }
 }

@@ -20,28 +20,28 @@ class Validator
         $this->idArray = 1;
     }
 
-    public function string()
+    public function string(): StringType
     {
         $stringObject = new StringType($this, $this->idString);
         $this->idString++;
         return $stringObject;
     }
 
-    public function number()
+    public function number(): NumberType
     {
         $numberObject = new NUmberType($this, $this->idInteger);
         $this->idInteger++;
         return $numberObject;
     }
 
-    public function array()
+    public function array(): ArrayType
     {
         $ArrayObject = new ArrayType($this, $this->idArray);
         $this->idArray++;
         return $ArrayObject;
     }
 
-    public function addValidator($type, $name, $fn)
+    public function addValidator(string $type, string $name, callable $fn): mixed
     {
         $types = ['string', 'number', 'array'];
         if (in_array($type, $types)) {
@@ -52,7 +52,7 @@ class Validator
         return $this;
     }
 
-    public function getFunctionByName(string $name)
+    public function getFunctionByName(string $name): callable
     {
         return $this->functions[$name];
     }
