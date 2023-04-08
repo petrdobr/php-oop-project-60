@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class IntValidatorTest extends TestCase
 {
-    public function testString(): void
+    public function testInt(): void
     {
         $v = new Validator();
         $schema = $v->number();
@@ -17,7 +17,14 @@ class IntValidatorTest extends TestCase
         $this->assertNotEquals($schema, $schema2);
         $this->assertNotEquals($schema, $schema3);
         $this->assertTrue($schema->isValid(null));
-        $this->assertFalse($schema->isValid(123));
+        $this->assertTrue($schema->isValid(null));
+
+        //schema3 is not required
+        $this->assertTrue($schema3->isValid(null));
+        $this->assertTrue($schema3->isValid(42));
+        $this->assertTrue($schema3->positive()->isValid(42));
+        $this->assertFalse($schema3->positive()->isValid(-42));
+        $this->assertTrue($schema3->positive()->isValid(null));
 
         $schema->required();
         $this->assertTrue($schema->isValid(42));

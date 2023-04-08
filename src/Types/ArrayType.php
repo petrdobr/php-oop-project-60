@@ -2,23 +2,23 @@
 
 namespace Hexlet\Validator\Types;
 
-class StringType
+class ArrayType
 {
     private $validator;
-    private string $subLine;
     private int $id;
-    public int $length;
+    public int $checkSize;
     //Didn't come up with anything better than flags :(
     public $flags = [
         'required' => false,
-        'contains' => false,
-        'minLength' => false
+        'sizeof' => false,
+        'shape' => false
     ];
     public $validity = [
         'required' => false,
-        'contains' => false,
-        'minLength' => false
+        'sizeof' => false,
+        'shape' => false
     ];
+    private $shapeArray;
 
     public function __construct($validator, $id)
     {
@@ -32,34 +32,37 @@ class StringType
         return $this;
     }
 
-    public function contains(string $subLine)
+    public function sizeof(int $size)
     {
-        $this->flags['contains'] = true;
-        $this->subLine = $subLine;
+        $this->flags['sizeof'] = true;
+        $this->checkSize = $size;
         return $this;
     }
 
-    public function minLength(int $length)
+    public function shape($array)
     {
-        $this->flags['minLength'] = true;
-        $this->length = $length;
-        return $this;
+        $this->flags['shape'] = true;
+        $this->shapeArray = $array;
     }
 
     public function isValid($data)
     {
         //Again flags. Will search for better solution later
-
         if ($this->flags['required']) {
-            $this->validity['required'] = (is_string($data) && $data != null) ? true : false;
+            $this->validity['required'] = (is_array($data) && $data !== null) ? true : false;
         }
-        if ($this->flags['contains']) {
-            $this->validity['contains'] = (str_contains($data, $this->subLine)) ? true : false;
+        if ($this->flags['sizeof']) {
+            $this->validity['sizeof'] = (count($data) == $this->checkSize) ? true : false;
         }
-        if ($this->flags['minLength']) {
-            $this->validity['minLength'] = ($this->length <= strlen($data)) ? true : false;
+        if ($this->flags['shape']) {
+            $checkArray = [];
+            //collect results for checking values
+            foreach ($this->shapeArray as $key => $checkOption) {
+                $checkArray[] = $checkOption->isValid($data[$key]);
+            }
+            //if no falses in checkArray then it's true. Otherwise false.
+            $this->validity['shape'] = (!in_array(false, $checkArray)) ? true : false;
         }
-
         //check each validity flag and compare with methods flag, if they are not coincident then false
         //otherwise - true
         foreach ($this->validity as $option => $flag) {

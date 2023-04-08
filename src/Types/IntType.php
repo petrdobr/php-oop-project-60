@@ -51,18 +51,13 @@ class IntType
         //Again flags. Will search for better solution later
 
         if ($this->flags['required']) {
-            $this->validity['required'] = (is_int($data)) ? true : false;
+            $this->validity['required'] = (is_int($data) && $data != null) ? true : false;
         }
         if ($this->flags['positive']) {
-            $this->validity['positive'] = ($data > 0) ? true : false;
+            $this->validity['positive'] = ($data >= 0) ? true : false;
         }
         if ($this->flags['range']) {
             $this->validity['range'] = ($data > $this->startNumber && $data < $this->endNumber) ? true : false;
-        }
-
-        //if no method was called then check for null
-        if (!in_array(true, $this->flags)) {
-            return $data === null;
         }
 
         //check each validity flag and compare with methods flag, if they are not coincident then false

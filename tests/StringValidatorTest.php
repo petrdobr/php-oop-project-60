@@ -17,10 +17,10 @@ class StringValidatorTest extends TestCase
         $this->assertNotEquals($schema, $schema2);
         $this->assertNotEquals($schema, $schema3);
         $this->assertTrue($schema->isValid(null));
-        $this->assertFalse($schema->isValid(''));
+        $this->assertTrue($schema->isValid('')); //!!!
 
         $schema->required();
-        $this->assertTrue($schema->isValid(''));
+        $this->assertFalse($schema->isValid('')); //!!!
         $this->assertFalse($schema->isValid(1234));
         $this->assertTrue($schema2->isValid(null));
         $this->assertFalse($schema->isValid(null));
