@@ -63,7 +63,7 @@ class ArrayType
     public function isValid(mixed $data): bool
     {
         if ($this->flags['required']) {
-            $this->validity['required'] = (is_array($data) && $data !== null) ? true : false;
+            $this->validity['required'] = (is_array($data) && $data != null) ? true : false;
         }
         if ($this->flags['sizeof']) {
             $this->validity['sizeof'] = (count($data) == $this->checkSize) ? true : false;
@@ -75,7 +75,7 @@ class ArrayType
                 $checkArray[] = $checkOption->isValid($data[$key]);
             }
             //if no falses in checkArray then it's true. Otherwise false.
-            $this->validity['shape'] = (!in_array(false, $checkArray, false)) ? true : false;
+            $this->validity['shape'] = (!in_array(false, $checkArray, true)) ? true : false;
         }
         if ($this->flags['test']) {
             $fn = $this->function;

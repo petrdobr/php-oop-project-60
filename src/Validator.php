@@ -44,7 +44,7 @@ class Validator
     public function addValidator(string $type, string $name, callable $fn): mixed
     {
         $types = ['string', 'number', 'array'];
-        if (in_array($type, $types)) {
+        if (in_array($type, $types, true)) {
             $this->functions += [$name => $fn];
         } else {
             throw new \Exception('No such type, sorry');
