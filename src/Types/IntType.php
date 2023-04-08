@@ -2,17 +2,17 @@
 
 namespace Hexlet\Validator\Types;
 
-class StringType
+class IntType
 {
     private $validator;
-    private string $subLine;
     private int $id;
-    public int $length;
+    public int $startNumber;
+    public int $endNumber;
     //Didn't come up with anything better than flags :(
     public $flags = [
         'required' => false,
-        'contains' => false,
-        'minLength' => false
+        'positive' => false,
+        'range' => false
     ];
     public $validity = [
         'required' => false,
@@ -32,17 +32,17 @@ class StringType
         return $this;
     }
 
-    public function contains(string $subLine)
+    public function positive()
     {
-        $this->flags['contains'] = true;
-        $this->subLine = $subLine;
+        $this->flags['positive'] = true;
         return $this;
     }
 
-    public function minLength(int $length)
+    public function range(int $startNumber, int $endNumber)
     {
-        $this->flags['minLength'] = true;
-        $this->length = $length;
+        $this->flags['range'] = true;
+        $this->startNumber = $startNumber;
+        $this->endNumber = $endNumber;
         return $this;
     }
 
@@ -51,13 +51,13 @@ class StringType
         //Again flags. Will search for better solution later
 
         if ($this->flags['required']) {
-            $this->validity['required'] = (is_string($data)) ? true : false;
+            $this->validity['required'] = (is_int($data)) ? true : false;
         }
-        if ($this->flags['contains']) {
-            $this->validity['contains'] = (str_contains($data, $this->subLine)) ? true : false;
+        if ($this->flags['positive']) {
+            $this->validity['positive'] = ($data > 0) ? true : false;
         }
-        if ($this->flags['minLength']) {
-            $this->validity['minLength'] = ($this->length <= strlen($data)) ? true : false;
+        if ($this->flags['range']) {
+            $this->validity['range'] = ($data > $this->startNumber && $data < $this->endNumber) ? true : false;
         }
 
         //if no method was called then check for null

@@ -5,7 +5,7 @@ namespace Hexlet\Validator\Tests;
 use Hexlet\Validator\Validator;
 use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends TestCase
+class StringValidatorTest extends TestCase
 {
     public function testString(): void
     {
@@ -19,13 +19,13 @@ class ValidatorTest extends TestCase
         $this->assertTrue($schema->isValid(null));
         $this->assertFalse($schema->isValid(''));
 
-        $schema->required(); 
+        $schema->required();
         $this->assertTrue($schema->isValid(''));
         $this->assertFalse($schema->isValid(1234));
         $this->assertTrue($schema2->isValid(null));
         $this->assertFalse($schema->isValid(null));
 
-        $this->assertTrue($schema->isValid('hexlet')); 
+        $this->assertTrue($schema->isValid('hexlet'));
         $schema->required();
         $schema->minLength(5);
         $this->assertTrue($schema->isValid('hexlet'));
