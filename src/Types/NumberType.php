@@ -6,18 +6,18 @@ class NumberType
 {
     private $validator;
     private int $id;
-    public int $startNumber;
-    public int $endNumber;
+    private int $beginNumber;
+    private int $endNumber;
     private $function;
     private $value;
     //Didn't come up with anything better than flags :(
-    public $flags = [
+    private $flags = [
         'required' => false,
         'positive' => false,
         'range' => false,
         'test' => false
     ];
-    public $validity = [
+    private $validity = [
         'required' => false,
         'positive' => false,
         'range' => false,
@@ -45,7 +45,7 @@ class NumberType
     public function range(int $startNumber, int $endNumber)
     {
         $this->flags['range'] = true;
-        $this->startNumber = $startNumber;
+        $this->beginNumber = $startNumber;
         $this->endNumber = $endNumber;
         return $this;
     }
@@ -66,7 +66,7 @@ class NumberType
             $this->validity['positive'] = ($data >= 0) ? true : false;
         }
         if ($this->flags['range']) {
-            $this->validity['range'] = ($data > $this->startNumber && $data < $this->endNumber) ? true : false;
+            $this->validity['range'] = ($data > $this->beginNumber && $data < $this->endNumber) ? true : false;
         }
         if ($this->flags['test']) {
             $fn = $this->function;

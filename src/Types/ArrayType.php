@@ -6,17 +6,17 @@ class ArrayType
 {
     private $validator;
     private int $id;
-    public int $checkSize;
+    private int $checkSize;
     private $function;
     private $value;
     //Didn't come up with anything better than flags :(
-    public $flags = [
+    private $flags = [
         'required' => false,
         'sizeof' => false,
         'shape' => false,
         'test' => false
     ];
-    public $validity = [
+    private $validity = [
         'required' => false,
         'sizeof' => false,
         'shape' => false,
@@ -47,6 +47,7 @@ class ArrayType
     {
         $this->flags['shape'] = true;
         $this->shapeArray = $array;
+        return $this;
     }
 
     public function test($name, $value)
@@ -76,7 +77,7 @@ class ArrayType
         }
         if ($this->flags['test']) {
             $fn = $this->function;
-            $result = $fn($data, $this->value); // should be bool?
+            $result = $fn($data, $this->value); 
             $this->validity['test'] = ($result) ? true : false;
         }
         //check each validity flag and compare with methods flag, if they are not coincident then false

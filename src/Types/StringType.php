@@ -9,17 +9,17 @@ class StringType
     private $validator;
     private string $subLine;
     private int $id;
-    public int $length;
+    private int $length;
     private $function;
     private $value;
     //Didn't come up with anything better than flags :(
-    public $flags = [
+    private $flags = [
         'required' => false,
         'contains' => false,
         'minLength' => false,
         'test' => false
     ];
-    public $validity = [
+    private $validity = [
         'required' => false,
         'contains' => false,
         'minLength' => false,
@@ -72,7 +72,7 @@ class StringType
         }
         if ($this->flags['test']) {
             $fn = $this->function;
-            $result = $fn($data, $this->value); // should be bool?
+            $result = $fn($data, $this->value); 
             $this->validity['test'] = ($result) ? true : false;
         }
 
