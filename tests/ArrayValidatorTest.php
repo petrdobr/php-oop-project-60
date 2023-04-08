@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayValidatorTest extends TestCase
 {
-    public function testInt(): void
+    public function testArray(): void
     {
         $v = new Validator();
         $schema = $v->array();

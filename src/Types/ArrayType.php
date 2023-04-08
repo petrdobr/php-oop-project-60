@@ -7,23 +7,27 @@ class ArrayType
     private $validator;
     private int $id;
     public int $checkSize;
+    private $function;
+    private $value;
     //Didn't come up with anything better than flags :(
     public $flags = [
         'required' => false,
         'sizeof' => false,
-        'shape' => false
+        'shape' => false,
+        'test' => false
     ];
     public $validity = [
         'required' => false,
         'sizeof' => false,
-        'shape' => false
+        'shape' => false,
+        'test' => false
     ];
     private $shapeArray;
 
     public function __construct($validator, $id)
     {
-        $this->validator = $validator;
         $this->id = $id;
+        $this->validator = $validator;
     }
 
     public function required()
@@ -45,9 +49,16 @@ class ArrayType
         $this->shapeArray = $array;
     }
 
+    public function test($name, $value)
+    {
+        $this->function = $this->validator->getFunctionByName($name);
+        $this->value = $value;
+        $this->flags['test'] = true;
+        return $this;
+    }
+
     public function isValid($data)
     {
-        //Again flags. Will search for better solution later
         if ($this->flags['required']) {
             $this->validity['required'] = (is_array($data) && $data !== null) ? true : false;
         }
@@ -62,6 +73,11 @@ class ArrayType
             }
             //if no falses in checkArray then it's true. Otherwise false.
             $this->validity['shape'] = (!in_array(false, $checkArray)) ? true : false;
+        }
+        if ($this->flags['test']) {
+            $fn = $this->function;
+            $result = $fn($data, $this->value); // should be bool?
+            $this->validity['test'] = ($result) ? true : false;
         }
         //check each validity flag and compare with methods flag, if they are not coincident then false
         //otherwise - true

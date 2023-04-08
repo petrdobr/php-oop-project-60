@@ -2,28 +2,34 @@
 
 namespace Hexlet\Validator\Types;
 
+use PHPUnit\Framework\Constraint\Callback;
+
 class StringType
 {
     private $validator;
     private string $subLine;
     private int $id;
     public int $length;
+    private $function;
+    private $value;
     //Didn't come up with anything better than flags :(
     public $flags = [
         'required' => false,
         'contains' => false,
-        'minLength' => false
+        'minLength' => false,
+        'test' => false
     ];
     public $validity = [
         'required' => false,
         'contains' => false,
-        'minLength' => false
+        'minLength' => false,
+        'test' => false
     ];
 
     public function __construct($validator, $id)
     {
-        $this->validator = $validator;
         $this->id = $id;
+        $this->validator = $validator;
     }
 
     public function required()
@@ -45,11 +51,16 @@ class StringType
         $this->length = $length;
         return $this;
     }
+    public function test($name, $value)
+    {
+        $this->function = $this->validator->getFunctionByName($name);
+        $this->value = $value;
+        $this->flags['test'] = true;
+        return $this;
+    }
 
     public function isValid($data)
     {
-        //Again flags. Will search for better solution later
-
         if ($this->flags['required']) {
             $this->validity['required'] = (is_string($data) && $data != null) ? true : false;
         }
@@ -58,6 +69,11 @@ class StringType
         }
         if ($this->flags['minLength']) {
             $this->validity['minLength'] = ($this->length <= strlen($data)) ? true : false;
+        }
+        if ($this->flags['test']) {
+            $fn = $this->function;
+            $result = $fn($data, $this->value); // should be bool?
+            $this->validity['test'] = ($result) ? true : false;
         }
 
         //check each validity flag and compare with methods flag, if they are not coincident then false

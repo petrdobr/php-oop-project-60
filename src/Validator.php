@@ -3,7 +3,7 @@
 namespace Hexlet\Validator;
 
 use Hexlet\Validator\Types\StringType;
-use Hexlet\Validator\Types\IntType;
+use Hexlet\Validator\Types\NumberType;
 use Hexlet\Validator\Types\ArrayType;
 
 class Validator
@@ -11,6 +11,7 @@ class Validator
     private int $idString;
     private int $idInteger;
     private int $idArray;
+    private array $functions = [];
 
     public function __construct()
     {
@@ -28,7 +29,7 @@ class Validator
 
     public function number()
     {
-        $numberObject = new IntType($this, $this->idInteger);
+        $numberObject = new NUmberType($this, $this->idInteger);
         $this->idInteger++;
         return $numberObject;
     }
@@ -38,5 +39,21 @@ class Validator
         $ArrayObject = new ArrayType($this, $this->idArray);
         $this->idArray++;
         return $ArrayObject;
+    }
+
+    public function addValidator($type, $name, $fn)
+    {
+        $types = ['string', 'number', 'array'];
+        if (in_array($type, $types)) {
+            $this->functions += [$name => $fn];
+        } else {
+            throw new \Exception('No such type, sorry');
+        }
+        return $this;
+    }
+
+    public function getFunctionByName(string $name)
+    {
+        return $this->functions[$name];
     }
 }
