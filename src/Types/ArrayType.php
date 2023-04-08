@@ -77,7 +77,7 @@ class ArrayType
         }
         if ($this->flags['test']) {
             $fn = $this->function;
-            $result = $fn($data, $this->value); 
+            $result = $fn($data, $this->value);
             $this->validity['test'] = ($result) ? true : false;
         }
         //check each validity flag and compare with methods flag, if they are not coincident then false

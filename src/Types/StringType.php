@@ -72,7 +72,7 @@ class StringType
         }
         if ($this->flags['test']) {
             $fn = $this->function;
-            $result = $fn($data, $this->value); 
+            $result = $fn($data, $this->value);
             $this->validity['test'] = ($result) ? true : false;
         }
 
