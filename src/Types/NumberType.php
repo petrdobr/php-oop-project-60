@@ -62,7 +62,7 @@ class NumberType
     public function isValid(mixed $data): bool
     {
         if ($this->flags['required']) {
-            $this->validity['required'] = (is_int($data) && $data !== null) ? true : false;
+            $this->validity['required'] = (is_int($data) && $data != null) ? true : false;
         }
         if ($this->flags['positive']) {
             $this->validity['positive'] = ($data >= 0) ? true : false;

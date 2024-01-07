@@ -4,8 +4,8 @@
   "type": "library",
   "authors": [
     {
-      "name": "Petr Dobrokhotov",
-      "email": "dobrokhotovp@gmail.com"
+      "name": "Kirill Mokevnin",
+      "email": "mokevnin@gmail.com"
     }
   ],
   "description": "hexlet validator code",
