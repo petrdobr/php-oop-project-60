@@ -31,6 +31,7 @@ class IntValidatorTest extends TestCase
         $this->assertFalse($schema->isValid('42'));
         $this->assertTrue($schema2->isValid(null));
         $this->assertFalse($schema->isValid(null));
+        $this->assertTrue($schema->isValid(0));
 
         $this->assertTrue($schema->isValid(9999999));
         $this->assertTrue($schema->positive()->isValid(42));
