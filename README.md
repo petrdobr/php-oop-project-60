@@ -43,7 +43,7 @@ $schema2 = $v->string(); // $schema != $schema2
 > [!NOTE]
 > All called methods listed below for different data types are stackable. For example calling positive and range methods for number type  will exclude negative numbers from the range:
 ```
-$schema->positive()->range(-5, 5);
+$schema->number()->positive()->range(-5, 5);
 
 $schema->isValid(-3); // false
 $schema->isValid(5); // true
